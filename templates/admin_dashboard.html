@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="container" style="padding:40px 20px;">
+    <h1 class="page-title">Admin Dashboard</h1>
+    <p class="page-subtitle">Administrare platformă Petrescue.</p>
+
+    <div class="admin-grid" style="margin-bottom:18px;">
+      <div class="admin-item">
+        <div class="muted" style="font-weight:900;">Utilizatori</div>
+        <div style="font-size:34px;font-weight:900;color:var(--title);">{{ users_count }}</div>
+      </div>
+      <div class="admin-item">
+        <div class="muted" style="font-weight:900;">Adăposturi</div>
+        <div style="font-size:34px;font-weight:900;color:var(--title);">{{ shelters_count }}</div>
+      </div>
+      <div class="admin-item">
+        <div class="muted" style="font-weight:900;">Cereri PENDING</div>
+        <div style="font-size:34px;font-weight:900;color:var(--burgundy);">{{ pending_count }}</div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <a class="btn btn--primary" href="{{ url_for('admin_users') }}">Gestionează utilizatori</a>
+      <a class="btn btn--primary" href="{{ url_for('admin_shelter_requests') }}">Cereri adăpost</a>
+      <a class="btn btn--primary" href="{{ url_for('admin_shelters') }}">Adăposturi aprobate</a>
+      <a class="btn" href="{{ url_for('admin_profile') }}">Profil Admin</a>
+      <a class="btn" href="{{ url_for('admin_logout') }}">Logout</a>
+    </div>
+  </div>
+</body>
+</html>

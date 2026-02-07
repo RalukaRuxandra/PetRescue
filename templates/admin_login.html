@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin Login</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="page">
+    <div class="container">
+      <h1 class="page-title">Admin</h1>
+      <p class="page-subtitle">Autentificare admin.</p>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-wrap">
+            {% for category, msg in messages %}
+              <div class="flash {{ category }}">{{ msg }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <div class="card card-pad" style="max-width:640px; margin:0 auto;">
+        <form class="form" method="post">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input id="username" name="username" type="text" placeholder="admin" required>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Parolă</label>
+            <input id="password" name="password" type="password" placeholder="parolă" required>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-primary" type="submit">Login</button>
+            <a class="btn btn-outline" href="{{ url_for('home') }}">Înapoi</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

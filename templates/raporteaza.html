@@ -1,0 +1,291 @@
+{% extends "base.html" %}
+
+{% block title %}Raportează{% endblock %}
+
+{% block extra_head %}
+  <!-- Leaflet (OSM) for map (no API key needed) -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  >
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="page-actions">
+    <a class="btn btn-ghost" href="javascript:history.back()">← Înapoi</a>
+    <a class="btn btn-primary" href="{{ url_for('adaposturi') }}">Vezi toate adăposturile</a>
+  </div>
+
+  <h1 class="page-title">Raportează un animal</h1>
+  <p class="page-subtitle">Oricine poate raporta un animal rătăcit, bolnav sau rănit. Îți sugerăm să descrii cât mai clar <b>locația</b>.</p>
+
+  <div class="report-layout">
+    <!-- LEFT: Map + shelters list -->
+    <section class="card report-left">
+      <div class="report-left-head">
+        <div>
+          <h2 class="section-title" style="margin:0">Adăposturi în apropiere</h2>
+          <p class="muted" style="margin:6px 0 0">
+            Dacă permiți locația, îți arătăm cele mai apropiate adăposturi care oferă <b>preluare</b>.
+          </p>
+        </div>
+        <button class="btn btn-outline" type="button" id="locBtn">📍 Folosește locația mea</button>
+      </div>
+
+      <div class="map-shell">
+        <div id="reportMap" class="report-map" aria-label="Hartă adăposturi"></div>
+        <div class="map-glow" aria-hidden="true"></div>
+      </div>
+
+      <div class="shelter-list-head">
+        <h3 style="margin:0">Adăposturi cu serviciu de preluare</h3>
+        <div class="pill" id="shelterCount">{{ pickup_shelters|length }} disponibile</div>
+      </div>
+
+      <div class="report-shelter-list" id="shelterList">
+        {% for s in pickup_shelters %}
+          <div class="report-shelter-item" data-shelter-id="{{ s.id }}" data-address="{{ s.address|e }}">
+            <div class="rs-top">
+              <div class="rs-name">{{ s.name }}</div>
+              <div class="rs-actions">
+                {% if s.phone %}
+                  <a class="btn btn-primary btn-small" href="tel:{{ s.phone|replace(' ', '') }}">Sună</a>
+                {% endif %}
+                {% if s.website %}
+                  <a class="btn btn-ghost btn-small" href="{{ s.website }}" target="_blank" rel="noopener">Website</a>
+                {% endif %}
+              </div>
+            </div>
+            <div class="rs-meta">
+              <div class="rs-row"><span class="k">Telefon:</span> <span class="v">{{ s.phone or '-' }}</span></div>
+              <div class="rs-row"><span class="k">Adresă:</span> <span class="v">{{ s.address or '-' }}</span></div>
+              <div class="rs-distance muted" data-distance>—</div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="report-note">
+        <div class="note-ico" aria-hidden="true">💡</div>
+        <div>
+          <div class="note-title">Sfat rapid</div>
+          <div class="note-text">În descriere, include: strada, reper (magazin/stație), ora la care ai văzut animalul și dacă pare rănit/agresiv.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT: Report form -->
+    <section class="card report-right">
+      <h2 class="section-title" style="margin-top:0">Trimite raportarea</h2>
+      <p class="muted" style="margin-top:-2px">Datele tale ajută adăpostul să revină rapid cu întrebări.</p>
+
+      <!-- FIX 1: endpoint corect -->
+      <form class="form" method="post" action="{{ url_for('raporteaza') }}">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="name">Nume</label>
+            <!-- FIX 2: name=reporter_name -->
+            <input id="name" name="reporter_name" type="text" placeholder="Numele tău" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Telefon</label>
+            <!-- FIX 2: name=reporter_phone -->
+            <input id="phone" name="reporter_phone" type="tel" placeholder="07xx xxx xxx" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <!-- FIX 2: name=reporter_email -->
+          <input id="email" name="reporter_email" type="email" placeholder="nume@email.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Descrierea cererii</label>
+          <textarea
+            id="description"
+            name="description"
+            rows="7"
+            placeholder="Ex: Câine rănit lângă Str. X nr. 10, în fața magazinului Y. Are zgardă roșie, șchiopătează. L-am văzut la ora 18:30."
+            required
+          ></textarea>
+          <div class="help-hint">Sugestie: scrie <b>locația exactă</b> (adresă + reper) și <b>starea</b> animalului.</div>
+        </div>
+
+        <div class="report-urgent">
+          <div class="urgent-head">
+            <div class="urgent-badge">Caz grav?</div>
+            <div class="muted">Dacă animalul este rănit grav, blocat, atacat sau există pericol imediat, contactează autoritățile.</div>
+          </div>
+
+          <div class="urgent-actions">
+            <a class="btn btn-primary" href="tel:112">Sună 112</a>
+            <a class="btn btn-outline" href="tel:0219752">Poliția Animalelor (București) – 021 9752</a>
+          </div>
+          <div class="urgent-mail">
+            <span class="muted">Email (București):</span>
+            <a class="link" href="mailto:office@plmb.ro">office@plmb.ro</a>
+          </div>
+          <div class="muted" style="margin-top:8px; font-size:.95rem">
+            Dacă ești în alt oraș, apelează 112 sau contactează Poliția / Poliția Locală din zona ta.
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-primary" type="submit">Trimite raportarea</button>
+          <a class="btn btn-ghost" href="{{ url_for('home') }}">Renunță</a>
+        </div>
+      </form>
+    </section>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+
+  <script>
+    // Lightweight, keyless map using OpenStreetMap + Nominatim geocoding.
+    (function () {
+      const shelters = Array.from(document.querySelectorAll('.report-shelter-item')).map((el) => ({
+        id: el.getAttribute('data-shelter-id'),
+        name: el.querySelector('.rs-name')?.textContent?.trim() || 'Adăpost',
+        address: el.getAttribute('data-address') || '',
+        el,
+      }));
+
+      const map = L.map('reportMap', { scrollWheelZoom: false });
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap'
+      }).addTo(map);
+
+      // Default: Romania-ish view
+      map.setView([45.9432, 24.9668], 6);
+
+      const markers = new Map();
+      const bounds = L.latLngBounds([]);
+
+      function haversineKm(a, b) {
+        const toRad = (d) => (d * Math.PI) / 180;
+        const R = 6371;
+        const dLat = toRad(b.lat - a.lat);
+        const dLng = toRad(b.lng - a.lng);
+        const sa = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLng / 2) ** 2;
+        return 2 * R * Math.asin(Math.sqrt(sa));
+      }
+
+      async function geocode(address) {
+        const key = 'geo_' + address;
+        try {
+          const cached = localStorage.getItem(key);
+          if (cached) return JSON.parse(cached);
+        } catch (e) {}
+
+        // Nominatim usage policy: keep it light.
+        const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(address);
+        const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+        const data = await res.json();
+        if (!data || !data.length) return null;
+        const point = { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+        try { localStorage.setItem(key, JSON.stringify(point)); } catch (e) {}
+        return point;
+      }
+
+      function setDistanceText(el, km) {
+        const box = el.querySelector('[data-distance]');
+        if (!box) return;
+        if (km == null || Number.isNaN(km)) {
+          box.textContent = '—';
+        } else {
+          const pretty = km < 1 ? Math.round(km * 1000) + ' m' : km.toFixed(km < 10 ? 1 : 0) + ' km';
+          box.textContent = 'Distanță aprox.: ' + pretty;
+        }
+      }
+
+      async function plotShelters() {
+        // Geocode sequentially to be polite with Nominatim.
+        for (const s of shelters) {
+          if (!s.address) continue;
+          try {
+            const pt = await geocode(s.address);
+            if (!pt) continue;
+
+            const marker = L.marker([pt.lat, pt.lng]).addTo(map).bindPopup(
+              '<b>' + s.name.replace(/</g,'&lt;') + '</b><br>' + (s.address || '')
+            );
+            markers.set(String(s.id), { marker, pt });
+            bounds.extend([pt.lat, pt.lng]);
+          } catch (e) {
+            // ignore
+          }
+        }
+
+        if (bounds.isValid()) {
+          map.fitBounds(bounds.pad(0.15));
+        }
+
+        // Clicking list item focuses marker
+        shelters.forEach((s) => {
+          s.el.addEventListener('click', () => {
+            const m = markers.get(String(s.id));
+            if (!m) return;
+            map.setView([m.pt.lat, m.pt.lng], 14, { animate: true });
+            m.marker.openPopup();
+            shelters.forEach((x) => x.el.classList.remove('is-active'));
+            s.el.classList.add('is-active');
+          });
+        });
+      }
+
+      async function applyUserLocation(pos) {
+        const user = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        const userMarker = L.circleMarker([user.lat, user.lng], {
+          radius: 8,
+          weight: 3,
+          fillOpacity: 0.4,
+        }).addTo(map).bindPopup('<b>Locația ta</b>');
+
+        // compute distances and sort list
+        const scored = shelters.map((s) => {
+          const m = markers.get(String(s.id));
+          const km = m ? haversineKm(user, m.pt) : null;
+          setDistanceText(s.el, km);
+          return { s, km: km == null ? 1e9 : km };
+        }).sort((a, b) => a.km - b.km);
+
+        const list = document.getElementById('shelterList');
+        scored.forEach(({ s }) => list.appendChild(s.el));
+
+        // Fit map to include user + shelters
+        const b = L.latLngBounds([]);
+        b.extend([user.lat, user.lng]);
+        for (const { pt } of markers.values()) b.extend([pt.lat, pt.lng]);
+        if (b.isValid()) map.fitBounds(b.pad(0.15));
+
+        userMarker.openPopup();
+      }
+
+      document.getElementById('locBtn')?.addEventListener('click', () => {
+        if (!navigator.geolocation) {
+          alert('Browserul tău nu suportă locația.');
+          return;
+        }
+        navigator.geolocation.getCurrentPosition(
+          (pos) => applyUserLocation(pos),
+          () => alert('Nu am putut obține locația. Poți continua fără.'));
+      });
+
+      plotShelters();
+    })();
+  </script>
+{% endblock %}

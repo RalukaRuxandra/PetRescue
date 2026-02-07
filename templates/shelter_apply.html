@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Devino Adăpost{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="page-title">Devino Adăpost PetRescue</h1>
+  <p class="page-subtitle">Trimite cererea ta. Doar adminul poate aproba.</p>
+
+  <div class="card card-pad" style="max-width:860px; margin:0 auto;">
+    <form class="form" method="post" enctype="multipart/form-data">
+
+      <div class="form-group">
+        <label for="name">Nume adăpost</label>
+        <input id="name" name="name" type="text" placeholder="Nume adăpost" required>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="email">Email (va fi user-ul)</label>
+          <input id="email" name="email" type="email" placeholder="nume@email.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Telefon</label>
+          <input id="phone" name="phone" type="tel" placeholder="07xx xxx xxx">
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="address">Adresă / Locație</label>
+          <input id="address" name="address" type="text" placeholder="Oraș, adresă (opțional)">
+        </div>
+
+        <div class="form-group">
+          <label for="website">Website (opțional)</label>
+          <input id="website" name="website" type="url" placeholder="https://...">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Descriere</label>
+        <textarea id="description" name="description" rows="6" placeholder="Spune-ne despre adăpost (mai detaliat)"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="photo">Poză adăpost (png/jpg/webp)</label>
+        <input id="photo" type="file" name="photo" accept=".png,.jpg,.jpeg,.webp">
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="password">Parolă</label>
+          <input id="password" type="password" name="password" placeholder="Minim 6 caractere" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password2">Confirmă parola</label>
+          <input id="password2" type="password" name="password2" placeholder="Confirmă parola" required>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit">Trimite cererea</button>
+        <a class="btn btn-outline" href="{{ url_for('adaposturi') }}">Înapoi</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Înregistrare Utilizator{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="page-title">Înregistrare Utilizator</h1>
+  <p class="page-subtitle">Creează contul tău PetRescue.</p>
+
+  <div class="card card-pad" style="max-width:760px; margin:0 auto;">
+    <form class="form" method="post">
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="first_name">Nume</label>
+          <input id="first_name" name="first_name" type="text" placeholder="Nume" required>
+        </div>
+
+        <div class="form-group">
+          <label for="last_name">Prenume</label>
+          <input id="last_name" name="last_name" type="text" placeholder="Prenume" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" placeholder="nume@email.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Telefon</label>
+        <input id="phone" name="phone" type="tel" placeholder="07xx xxx xxx">
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="password">Parolă</label>
+          <input id="password" name="password" type="password" placeholder="Minim 6 caractere" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password2">Confirmă parola</label>
+          <input id="password2" name="password2" type="password" placeholder="Confirmă parola" required>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit">Creează cont</button>
+        <a class="btn btn-outline" href="{{ url_for('login_utilizator') }}">Înapoi</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Editează animal{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="page-actions">
+    <a class="btn btn-ghost" href="{{ url_for('shelter_dashboard') }}">← Înapoi</a>
+  </div>
+
+  <h1 class="page-title">Editează animal</h1>
+  <p class="page-subtitle">Actualizează informațiile și, dacă vrei, schimbă poza.</p>
+
+  <div class="card card-pad" style="max-width: 980px; margin: 0 auto;">
+    <form class="form" method="post" enctype="multipart/form-data">
+
+      <div class="form-group">
+        <label for="name">Nume animal</label>
+        <input id="name" name="name" type="text" value="{{ animal.name }}" required>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="species">Specie</label>
+          <input id="species" name="species" type="text" value="{{ animal.species }}">
+        </div>
+
+        <div class="form-group">
+          <label for="age">Vârstă</label>
+          <input id="age" name="age" type="text" value="{{ animal.age }}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="story">Poveste / descriere</label>
+        <textarea id="story" name="story" rows="7">{{ animal.story }}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Poză curentă</label>
+        {% if animal.photo_filename %}
+          <img src="{{ url_for('static', filename='uploads/' ~ animal.photo_filename) }}"
+               alt="Poză {{ animal.name }}"
+               style="max-width:260px; border-radius:12px; border:1px solid rgba(0,0,0,0.12);">
+        {% else %}
+          <div class="muted">-</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="photo">Schimbă poza (opțional)</label>
+        <input id="photo" name="photo" type="file" accept=".png,.jpg,.jpeg,.webp">
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit">Salvează</button>
+        <a class="btn btn-outline" href="{{ url_for('shelter_dashboard') }}">Anulează</a>
+      </div>
+    </form>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Cereri Adăpost</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="container" style="padding:40px 20px;">
+    <h1 class="page-title">Cereri Adăpost</h1>
+    <p class="page-subtitle">Aprobă sau respinge cererile. Doar adminul poate face asta.</p>
+
+    <div class="btn-row" style="margin-bottom:18px;">
+      <a class="btn" href="{{ url_for('admin_dashboard') }}">Înapoi la Dashboard</a>
+      <a class="btn" href="{{ url_for('admin_shelters') }}">Adăposturi aprobate</a>
+      <a class="btn" href="{{ url_for('admin_logout') }}">Logout</a>
+    </div>
+
+    <div class="admin-grid">
+      {% for r in requests %}
+        <div class="admin-item">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+            <div style="font-weight:900;color:var(--title);font-size:18px;">#{{ r.id }} · {{ r.name }}</div>
+            {% if r.status == 'PENDING' %}
+              <span class="tag tag--pending">PENDING</span>
+            {% elif r.status == 'APPROVED' %}
+              <span class="tag tag--approved">APPROVED</span>
+            {% else %}
+              <span class="tag tag--rejected">REJECTED</span>
+            {% endif %}
+          </div>
+
+          <div class="muted" style="margin-top:8px;">{{ r.email }} · {{ r.phone }}</div>
+          <div class="muted">{{ r.address }}</div>
+          {% if r.website %}<div class="muted">{{ r.website }}</div>{% endif %}
+          {% if r.description %}<div style="margin-top:10px;">{{ r.description }}</div>{% endif %}
+
+          <div class="muted" style="margin-top:10px;">
+            Trimisa: {{ r.submitted_at }} {% if r.reviewed_at %} · Revizuita: {{ r.reviewed_at }}{% endif %}
+          </div>
+
+          {% if r.status == 'PENDING' %}
+          <div class="btn-row" style="margin-top:14px;">
+            <form method="post" action="{{ url_for('admin_shelter_request_approve', req_id=r.id) }}">
+              <button class="btn btn--green" type="submit">Aprobă</button>
+            </form>
+            <form method="post" action="{{ url_for('admin_shelter_request_reject', req_id=r.id) }}">
+              <button class="btn btn--burgundy" type="submit">Respinge</button>
+            </form>
+          </div>
+          {% else %}
+          <div class="muted" style="margin-top:14px;font-weight:900;">Acțiuni indisponibile</div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</body>
+</html>

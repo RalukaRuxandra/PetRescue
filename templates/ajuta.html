@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Ajută{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="page-actions">
+    <a class="btn btn-ghost" href="javascript:history.back()">← Înapoi</a>
+  </div>
+
+  <h1 class="page-title">Ajută</h1>
+  <p class="page-subtitle">Alege una dintre opțiunile de mai jos pentru a sprijini adăposturile partenere.</p>
+
+  {% if not current_user %}
+    <div class="card">
+      <h2 class="section-title">Important</h2>
+      <p class="muted">
+        Poți dona doar dacă ești <strong>înregistrat</strong> și <strong>autentificat</strong>.
+        Conectează-te mai jos pentru a continua.
+      </p>
+
+      <form method="post" class="form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" placeholder="nume@email.com" required>
+          </div>
+
+          <div class="form-group">
+            <label>Parolă</label>
+            <input type="password" name="password" placeholder="••••••••" required>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-primary" type="submit">Login</button>
+          <a class="btn btn-outline" href="{{ url_for('register_user') }}">Înregistrare</a>
+        </div>
+      </form>
+    </div>
+  {% endif %}
+
+  <div class="help-grid">
+    <a class="help-card" href="{{ url_for('ajuta_category', category='materials') }}">
+      <div class="help-ico">📦</div>
+      <div class="help-title">Donează alimente sau materiale</div>
+      <div class="help-desc">Hrană, pături, medicamente, consumabile.</div>
+      <div class="help-cta">Continuă →</div>
+    </a>
+
+    <a class="help-card" href="{{ url_for('ajuta_category', category='money') }}">
+      <div class="help-ico">💳</div>
+      <div class="help-title">Donează bani</div>
+      <div class="help-desc">Susții urgențele și cheltuielile medicale.</div>
+      <div class="help-cta">Continuă →</div>
+    </a>
+
+    <a class="help-card" href="{{ url_for('ajuta_category', category='volunteer') }}">
+      <div class="help-ico">🤝</div>
+      <div class="help-title">Fii voluntar</div>
+      <div class="help-desc">Ajută direct: plimbări, curățenie, transport.</div>
+      <div class="help-cta">Continuă →</div>
+    </a>
+  </div>
+
+</div>
+{% endblock %}

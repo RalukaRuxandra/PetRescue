@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}PetRescue{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+{% if not hide_topbar %}
+<header class="topbar">
+  <div class="topbar-inner">
+
+    <!-- STÂNGA: 3 butoane unul sub altul -->
+    <div class="nav-col nav-left">
+      <a class="nav-btn nav-btn-maroon" href="{{ url_for('adaposturi') }}">
+        <span class="nav-ico">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 10.5 12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1v-10.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span>Adăposturi</span>
+      </a>
+
+      <a class="nav-btn nav-btn-maroon" href="{{ url_for('ajuta') }}">
+        <span class="nav-ico">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 21s-7-4.6-9.5-9C.6 8.3 2.5 5 6 5c2 0 3.3 1.1 4 2 0 0 1.4-2 4-2 3.5 0 5.4 3.3 3.5 7-2.5 4.4-9.5 9-9.5 9z"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span>Ajută</span>
+      </a>
+
+      <a class="nav-btn nav-btn-maroon" href="{{ url_for('raporteaza') }}">
+        <span class="nav-ico">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3 1 21h22L12 3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M12 9v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="12" cy="17" r="1" fill="currentColor"/>
+          </svg>
+        </span>
+        <span>Raportează</span>
+      </a>
+    </div>
+
+    <!-- MIJLOC: LOGO -->
+    <div class="nav-center">
+      <a class="logo-link" href="{{ url_for('home') }}" title="Home">
+        <img class="logo-img" src="{{ url_for('static', filename='images/logo-dna-petrescue.png') }}" alt="D-na Petrescue">
+      </a>
+    </div>
+
+    <!-- DREAPTA -->
+    <div class="nav-col nav-right">
+      {% if current_user %}
+        <a class="nav-btn nav-btn-green" href="{{ url_for('profil') }}">
+          <span class="nav-ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
+              <path d="M4 21c1.5-4 5-6 8-6s6.5 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span>Profil</span>
+        </a>
+      {% elif current_shelter %}
+        <a class="nav-btn nav-btn-green" href="{{ url_for('shelter_dashboard') }}">
+          <span class="nav-ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
+              <path d="M4 21c1.5-4 5-6 8-6s6.5 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span>Profil</span>
+        </a>
+      {% else %}
+        <a class="nav-btn nav-btn-green" href="{{ url_for('login') }}">
+          <span class="nav-ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M10 17l5-5-5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M15 12H3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M21 3v18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span>Login</span>
+        </a>
+      {% endif %}
+
+      <a class="nav-btn nav-btn-green" href="{{ url_for('contact') }}">
+        <span class="nav-ico">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 6h16v12H4z" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span>Contact</span>
+      </a>
+    </div>
+
+  </div>
+</header>
+{% endif %}
+
+<main class="page">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-wrap">
+        {% for category, msg in messages %}
+          <div class="flash {{ category }}">{{ msg }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</main>
+
+</body>
+</html>

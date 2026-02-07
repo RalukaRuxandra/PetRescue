@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Raportare trimisă{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="page-actions">
+    <a class="btn btn-ghost" href="{{ url_for('raporteaza') }}">← Înapoi la Raportează</a>
+    <a class="btn btn-primary" href="{{ url_for('adaposturi') }}">Vezi adăposturile</a>
+  </div>
+
+  <div class="card report-confirm">
+    <div class="confirm-ico" aria-hidden="true">✅</div>
+    <h1 class="page-title" style="margin-top:10px">Cererea a fost trimisă</h1>
+    <p class="page-subtitle" style="margin-bottom:0">
+      Îți mulțumim! E posibil să fii contactat(ă) telefonic de către un adăpost pentru detalii.
+    </p>
+
+    <div class="confirm-actions">
+      <a class="btn btn-primary" href="{{ url_for('raporteaza') }}">Trimite o altă raportare</a>
+      <a class="btn btn-outline" href="{{ url_for('home') }}">Înapoi acasă</a>
+    </div>
+
+    <div class="confirm-note">
+      <div class="note-ico" aria-hidden="true">🕒</div>
+      <div>
+        <div class="note-title">Ce poți face între timp</div>
+        <div class="note-text">Dacă este sigur, rămâi în zonă câteva minute și urmărește animalul (fără să te expui). Orice detaliu suplimentar ajută.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

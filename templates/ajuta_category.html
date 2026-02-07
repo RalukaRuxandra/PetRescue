@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block title %}Ajută{% endblock %}
+
+{% block content %}
+<div class="page">
+  <div class="page__top">
+    <a class="btn btn-ghost" href="{{ url_for('ajuta') }}">← Înapoi</a>
+  </div>
+
+  {% if category == 'materials' %}
+    <h1 class="page-title page-title--center">Donează alimente sau materiale</h1>
+    <p class="page-subtitle page-subtitle--center">Spune ce vrei să donezi și alege adăpostul.</p>
+  {% elif category == 'money' %}
+    <h1 class="page-title page-title--center">Donează bani</h1>
+    <p class="page-subtitle page-subtitle--center">Alege adăpostul și introdu suma.</p>
+  {% else %}
+    <h1 class="page-title page-title--center">Fii voluntar</h1>
+    <p class="page-subtitle page-subtitle--center">Alege adăpostul și scrie disponibilitatea ta.</p>
+  {% endif %}
+
+  <div class="card card--soft">
+    <h2 class="section-title">Alege adăpostul</h2>
+
+    <form method="post" class="form">
+      <div class="choice-row">
+        <label class="radio">
+          <input type="radio" name="mode" value="auto" checked>
+          <span>PetRescue alege automat (în funcție de urgențe)</span>
+        </label>
+
+        <label class="radio">
+          <input type="radio" name="mode" value="manual">
+          <span>Aleg eu adăpostul (selectează din tabel)</span>
+        </label>
+      </div>
+
+      {% if category == 'money' %}
+        <div class="form-row">
+          <label>Suma (RON)</label>
+          <input type="number" name="amount" min="1" step="1" placeholder="ex: 50" required>
+        </div>
+      {% elif category == 'materials' %}
+        <div class="form-row">
+          <label>Ce vrei să donezi?</label>
+          <input type="text" name="details" placeholder="ex: 10kg hrană, pături, deparazitare..." required>
+        </div>
+      {% else %}
+        <div class="form-row">
+          <label>Disponibilitate</label>
+          <input type="text" name="details" placeholder="ex: weekend, 2 ore miercuri, transport ocazional..." required>
+        </div>
+      {% endif %}
+
+      <div class="form-row">
+        <label>Mesaj (opțional)</label>
+        <textarea name="message" rows="4" placeholder="Un mesaj pentru adăpost..."></textarea>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-head">
+          <div class="muted">
+            Bifează unul sau mai multe adăposturi (activ doar dacă alegi „Aleg eu adăpostul”).
+          </div>
+        </div>
+
+        <table class="sortable" id="sheltersTable">
+          <thead>
+            <tr>
+              <th style="width:64px;">Select</th>
+              <th data-sort="name">Nume</th>
+              <th data-sort="address">Locație</th>
+              <th data-sort="type">Tip</th>
+              <th data-sort="urgent">Urgent</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in shelters %}
+              <tr
+                data-name="{{ s.name|lower }}"
+                data-address="{{ (s.address or '')|lower }}"
+                data-type="{{ (s.shelter_type or 'General')|lower }}"
+                data-urgent="{{ s.urgent_level or 0 }}"
+              >
+                <td>
+                  <input class="chk" type="checkbox" name="shelter_ids" value="{{ s.id }}">
+                </td>
+                <td><b>{{ s.name }}</b></td>
+                <td class="muted">{{ s.address or "-" }}</td>
+                <td class="muted">{{ s.shelter_type or "General" }}</td>
+                <td class="muted">{{ s.urgent_level or 0 }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit">Trimite</button>
+        <a class="btn btn-outline" href="{{ url_for('adaposturi') }}">Vezi adăposturi</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+(function(){
+  const table = document.getElementById('sheltersTable');
+  if (!table) return;
+
+  const headers = table.querySelectorAll('th[data-sort]');
+  const tbody = table.querySelector('tbody');
+
+  function sortRows(key, asc=true){
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    rows.sort((a,b)=>{
+      const va = a.dataset[key] ?? '';
+      const vb = b.dataset[key] ?? '';
+      const na = Number(va), nb = Number(vb);
+
+      if (!isNaN(na) && !isNaN(nb) && key === 'urgent') {
+        return asc ? (na-nb) : (nb-na);
+      }
+      return asc ? va.localeCompare(vb) : vb.localeCompare(va);
+    });
+    rows.forEach(r=>tbody.appendChild(r));
+  }
+
+  let state = {};
+  headers.forEach(th=>{
+    th.style.cursor = 'pointer';
+    th.addEventListener('click', ()=>{
+      const key = th.dataset.sort;
+      state[key] = !state[key];
+      sortRows(key, state[key]);
+    });
+  });
+})();
+</script>
+{% endblock %}

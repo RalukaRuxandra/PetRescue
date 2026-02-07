@@ -1,0 +1,29 @@
+
+****************************************** PORNIRE SITE ******************************************
+
+*** shift + click dreapta in fisierul radacina si "Open Powershell here" ***
+
+
+python -m venv venv
+
+venv\Scripts\activate
+
+pip install flask werkzeug
+
+python app.py
+
+
+http://127.0.0.1:5000
+http://127.0.0.1:5000/admin
+
+
+
+****************************************** RESETARE PAROLA ******************************************
+
+*** click dreapta in fisierul radacina si "Open Powershell here" ***
+
+
+venv\Scripts\activate
+
+python reset_admin_password.py
+

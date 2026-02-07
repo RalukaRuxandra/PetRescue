@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}Profil Adăpost{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="page-actions">
+    <a class="btn btn-ghost" href="{{ url_for('adaposturi') }}">← Înapoi</a>
+    <a class="btn btn-outline" href="{{ url_for('logout_adapost') }}">Logout</a>
+  </div>
+
+  <h1 class="page-title">Profil Adăpost</h1>
+  <p class="page-subtitle">
+    Aici poți gestiona animalele pe care le ai în grijă: adaugă, editează, șterge.
+  </p>
+
+  <div class="card card-pad" style="max-width: 980px; margin: 0 auto 18px;">
+    <h2 class="card-title">{{ shelter.name }}</h2>
+    <p class="muted" style="margin:0;">
+      Email: <b>{{ shelter.email }}</b><br>
+      Telefon: <b>{{ shelter.phone or '-' }}</b><br>
+      Locație: <b>{{ shelter.address or '-' }}</b>
+    </p>
+  </div>
+
+  <div class="card card-pad" style="max-width: 980px; margin: 0 auto 22px;">
+    <h2 class="card-title">Adaugă un animal</h2>
+
+    <form class="form" method="post" action="{{ url_for('shelter_animals_add') }}" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="name">Nume animal</label>
+        <input id="name" name="name" type="text" placeholder="ex: Luna" required>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="species">Specie (opțional)</label>
+          <input id="species" name="species" type="text" placeholder="ex: Pisică / Câine">
+        </div>
+
+        <div class="form-group">
+          <label for="age">Vârstă (opțional)</label>
+          <input id="age" name="age" type="text" placeholder="ex: 2 ani">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="story">Poveste / descriere</label>
+        <textarea id="story" name="story" rows="6" placeholder="Scrie o scurtă poveste despre animal..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="photo">Poză (png/jpg/webp)</label>
+        <input id="photo" name="photo" type="file" accept=".png,.jpg,.jpeg,.webp">
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit">Adaugă animal</button>
+      </div>
+    </form>
+  </div>
+
+  <h2 class="card-title" style="max-width:980px; margin:0 auto 10px;">Animalele tale</h2>
+
+  {% if animals and animals|length > 0 %}
+    <div class="shelter-grid" style="max-width: 980px; margin: 0 auto;">
+      {% for a in animals %}
+        <div class="shelter-card">
+          <div class="shelter-photo">
+            {% if a.photo_filename %}
+              <img src="{{ url_for('static', filename='uploads/' ~ a.photo_filename) }}" alt="Poză {{ a.name }}">
+            {% else %}
+              <div class="shelter-photo-empty">
+                <div class="empty-ico">🐾</div>
+                <div>Fără poză</div>
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="shelter-info">
+            <h3 class="shelter-name">{{ a.name }}</h3>
+
+            <div class="shelter-row"><span class="k">Specie:</span> <span class="v">{{ a.species or '-' }}</span></div>
+            <div class="shelter-row"><span class="k">Vârstă:</span> <span class="v">{{ a.age or '-' }}</span></div>
+
+            {% if a.story %}
+              <div class="shelter-row" style="margin-top:8px;">
+                <span class="k">Poveste:</span>
+                <span class="v">{{ a.story }}</span>
+              </div>
+            {% endif %}
+
+            <div class="form-actions" style="margin-top: 12px;">
+              <a class="btn btn-outline" href="{{ url_for('shelter_animals_edit', animal_id=a.id) }}">Editează</a>
+
+              <form method="post"
+                    action="{{ url_for('shelter_animals_delete', animal_id=a.id) }}"
+                    onsubmit="return confirm('Sigur ștergi acest animal?');"
+                    style="display:inline;">
+                <button class="btn btn-outline" type="submit" style="border-color: rgba(180,35,24,0.45); color:#b42318;">
+                  Șterge
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="card card-pad" style="max-width:980px; margin:0 auto;">
+      <p class="muted" style="margin:0;">Încă nu ai adăugat niciun animal.</p>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

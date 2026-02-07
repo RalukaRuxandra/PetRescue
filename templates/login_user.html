@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Login Utilizator{% endblock %}
+
+{% block content %}
+<section class="container">
+  <h1 class="page-title page-title--center">Login Utilizator</h1>
+  <p class="page-subtitle page-subtitle--center">Conectează-te pentru a folosi platforma Petrescue.</p>
+
+  <form class="form-card" method="POST">
+    <div class="form-field">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" value="{{ email or '' }}" required>
+    </div>
+
+    <div class="form-field">
+      <label for="password">Parolă</label>
+      <input id="password" name="password" type="password" required>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn--submit" type="submit">Login</button>
+      <a class="btn" href="{{ url_for('register_user') }}">Înregistrare</a>
+      <a class="btn btn--link" href="{{ url_for('login') }}">Înapoi</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Contact{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="page-actions">
+    <a class="btn btn-ghost" href="javascript:history.back()">← Înapoi</a>
+  </div>
+
+  <h1 class="page-title">Contact</h1>
+
+  <div class="contact-grid">
+    <div class="card">
+      <h2 class="section-title">Date de contact</h2>
+      <div class="kv">
+        <div><strong>Email:</strong> contact@petrescue.ro</div>
+        <div><strong>Telefon:</strong> 07xx xxx xxx</div>
+      </div>
+      <div class="note muted">
+        Îți răspundem cât mai repede posibil.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">Mesaj către D-na Petrescue</h2>
+      <p class="muted">Vrei să ne contactezi? Completează formularul de mai jos:</p>
+
+      <form method="post" class="form">
+        <div class="form-group">
+          <label>Nume</label>
+          <input type="text" name="name" placeholder="Numele tău" required>
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" name="email" placeholder="nume@email.com" required>
+        </div>
+
+        <div class="form-group">
+          <label>Subiect (opțional)</label>
+          <input type="text" name="subject" placeholder="Despre ce este mesajul?">
+        </div>
+
+        <div class="form-group">
+          <label>Mesaj</label>
+          <textarea name="message" rows="6" placeholder="Scrie mesajul tău..." required></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-primary" type="submit">Trimite</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+

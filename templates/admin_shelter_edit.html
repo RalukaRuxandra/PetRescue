@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Editează Adăpost{% endblock %}
+
+{% block content %}
+<section class="container">
+  <h1 class="page-title page-title--center">Editează adăpost</h1>
+
+  <form class="form-card" method="POST" enctype="multipart/form-data">
+    <div class="form-field">
+      <label for="name">Nume</label>
+      <input id="name" name="name" type="text" value="{{ shelter.name }}" required>
+    </div>
+
+    <div class="form-field">
+      <label for="phone">Telefon</label>
+      <input id="phone" name="phone" type="text" value="{{ shelter.phone or '' }}">
+    </div>
+
+    <div class="form-field">
+      <label for="city">Oraș</label>
+      <input id="city" name="city" type="text" value="{{ shelter.city or '' }}">
+    </div>
+
+    <div class="form-field">
+      <label for="address">Adresă</label>
+      <input id="address" name="address" type="text" value="{{ shelter.address or '' }}">
+    </div>
+
+    <div class="form-field">
+      <label for="website">Website</label>
+      <input id="website" name="website" type="text" value="{{ shelter.website or '' }}">
+    </div>
+
+    <div class="form-field">
+      <label for="description">Descriere</label>
+      <textarea id="description" name="description">{{ shelter.description or '' }}</textarea>
+    </div>
+
+    <div class="form-field">
+      <label for="photo">Poză (opțional)</label>
+      <input id="photo" name="photo" type="file" accept=".png,.jpg,.jpeg,.webp">
+      <small style="color:var(--muted); font-weight:700;">Dacă alegi o poză nouă, o înlocuiește pe cea veche.</small>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn--submit" type="submit">Salvează</button>
+      <a class="btn" href="{{ url_for('admin_shelter_detail', shelter_id=shelter.id) }}">Înapoi</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

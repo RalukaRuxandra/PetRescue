@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Autentificare{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="page-actions">
+    <a class="btn btn-ghost" href="javascript:history.back()">← Înapoi</a>
+  </div>
+
+  <h1 class="page-title">Autentificare</h1>
+  <p class="page-subtitle">Alege tipul de cont cu care vrei să te conectezi.</p>
+
+  <div class="choice-grid">
+    <div class="card choice-card">
+      <div class="choice-head">
+        <div class="choice-ico">👤</div>
+        <h2>Login Utilizator</h2>
+      </div>
+      <p class="muted">Pentru iubitorii de animale care vor să comunice cu adăposturile.</p>
+      <div class="choice-actions">
+        <a class="btn btn-primary" href="{{ url_for('login_utilizator') }}">Continuă</a>
+        <a class="btn btn-outline" href="{{ url_for('register_user') }}">Creează cont</a>
+      </div>
+    </div>
+
+    <div class="card choice-card">
+      <div class="choice-head">
+        <div class="choice-ico">🏠</div>
+        <h2>Login Adăpost</h2>
+      </div>
+      <p class="muted">Pentru adăposturile aprobate pe platforma Petrescue.</p>
+      <div class="choice-actions">
+        <a class="btn btn-primary" href="{{ url_for('login_adapost') }}">Continuă</a>
+        <a class="btn btn-outline" href="{{ url_for('shelter_apply') }}">Devino Adăpost</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

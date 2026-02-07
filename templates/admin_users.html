@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Admin - Utilizatori | PetRescue{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <div class="hero__card">
+      <h1 class="hero__title" style="font-size: 34px;">Utilizatori</h1>
+      <p class="hero__subtitle">
+        Listă utilizatori înregistrați (admin).
+      </p>
+
+      <div class="kv" style="margin-top: 10px;">
+        {% if users|length == 0 %}
+          <div class="kv__row">
+            <div class="kv__key">Status</div>
+            <div class="kv__val">Nu există utilizatori.</div>
+          </div>
+        {% else %}
+          {% for u in users %}
+            <div class="kv__row" style="align-items: center;">
+              <div class="kv__key">#{{ u.id }}</div>
+              <div class="kv__val">
+                <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+                  <div style="min-width: 220px;">
+                    <div style="font-weight:600;">
+                      {{ u.first_name }} {{ u.last_name }}
+                    </div>
+                    <div style="font-size:13px; opacity:0.75;">
+                      {{ u.email }}{% if u.phone %} · {{ u.phone }}{% endif %}
+                    </div>
+                  </div>
+
+                  <a class="btn btn--primary" href="{{ url_for('admin_user_edit', user_id=u.id) }}">
+                    Editează
+                  </a>
+
+                  <form method="post"
+                        action="{{ url_for('admin_user_delete', user_id=u.id) }}"
+                        onsubmit="return confirm('Sigur vrei să ștergi utilizatorul #{{ u.id }}?');">
+                    <button class="btn btn--ghost" type="submit">Șterge</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      <div class="hero__actions" style="margin-top: 14px;">
+        <a class="btn btn--primary" href="{{ url_for('admin_dashboard') }}">Înapoi la Dashboard</a>
+        <a class="btn btn--ghost" href="{{ url_for('admin_logout') }}">Logout Admin</a>
+      </div>
+    </div>
+  </section>
+{% endblock %}

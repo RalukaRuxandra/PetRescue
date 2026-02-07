@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Adăposturi{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="page-actions">
+    <a class="btn btn-ghost" href="javascript:history.back()">← Înapoi</a>
+    {% if not current_shelter %}
+    <a class="btn btn-primary" href="{{ url_for('shelter_apply') }}">Devino Adăpost PetRescue</a>
+    {% endif %}
+  </div>
+
+  <h1 class="page-title">Adăposturi aprobate</h1>
+
+  <div class="shelter-grid">
+    {% for s in shelters %}
+      <div class="shelter-card">
+        <div class="shelter-photo">
+          {% if s.photo_filename %}
+            <img src="{{ url_for('static', filename='uploads/' ~ s.photo_filename) }}" alt="Poză {{ s.name }}">
+          {% else %}
+            <div class="shelter-photo-empty">
+              <div class="empty-ico">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M3 10.5 12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1v-10.5z"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div>Fără poză</div>
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="shelter-info">
+          <h3 class="shelter-name">{{ s.name }}</h3>
+
+          <div class="shelter-row"><span class="k">Email:</span> <span class="v">{{ s.email }}</span></div>
+          <div class="shelter-row"><span class="k">Telefon:</span> <span class="v">{{ s.phone }}</span></div>
+          <div class="shelter-row"><span class="k">Adresă:</span> <span class="v">{{ s.address }}</span></div>
+          <div class="shelter-row"><span class="k">Website:</span>
+            <span class="v">
+              {% if s.website %}
+                <a class="link" href="{{ s.website }}" target="_blank" rel="noopener">{{ s.website }}</a>
+              {% else %}
+                -
+              {% endif %}
+            </span>
+          </div>
+
+          <div class="shelter-meta">
+            <span class="pill">Tip: {{ s.shelter_type }}</span>
+            {% if s.urgent_level|int > 0 %}
+              <span class="pill pill-urgent">Urgență: {{ s.urgent_level }}</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}

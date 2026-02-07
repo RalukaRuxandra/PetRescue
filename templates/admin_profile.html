@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Profil Admin{% endblock %}
+
+{% block content %}
+<section class="shelter-apply-page">
+  <h1 class="page-title page-title--center">Profil Admin</h1>
+  <p class="page-subtitle page-subtitle--center">
+    Actualizează datele contului de administrator.
+  </p>
+
+  <form class="form-card" method="POST">
+    <div class="form-field">
+      <label for="username">Username</label>
+      <input id="username" type="text" value="{{ admin.username }}" disabled />
+    </div>
+
+    <div class="form-field">
+      <label for="full_name">Nume complet</label>
+      <input id="full_name" name="full_name" type="text" value="{{ admin.full_name or '' }}" />
+    </div>
+
+    <div class="form-field">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" value="{{ admin.email or '' }}" />
+    </div>
+
+    <div class="form-field">
+      <label for="phone">Telefon</label>
+      <input id="phone" name="phone" type="text" value="{{ admin.phone or '' }}" />
+    </div>
+
+    <hr style="margin: 18px 0; border:0; border-top:1px solid rgba(0,0,0,.08)">
+
+    <div class="form-field">
+      <label for="new_password">Parolă nouă (opțional)</label>
+      <input id="new_password" name="new_password" type="password" />
+      <small class="hint">Lasă gol dacă nu vrei să o schimbi. Minim 8 caractere.</small>
+    </div>
+
+    <div class="form-field">
+      <label for="new_password2">Confirmă parola nouă</label>
+      <input id="new_password2" name="new_password2" type="password" />
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn--submit" type="submit">
+        <span>Salvează</span>
+      </button>
+
+      <a class="btn btn--link" href="{{ url_for('admin_dashboard') }}">Înapoi</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

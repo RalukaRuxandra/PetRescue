@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Admin - Editare utilizator{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="page-title">Editează utilizator</h1>
+  <p class="page-subtitle">Actualizează datele utilizatorului.</p>
+
+  <div class="card card-pad" style="max-width:860px; margin:0 auto;">
+    <form class="form" method="post">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="first_name">Nume</label>
+          <input id="first_name" name="first_name" type="text" value="{{ user.first_name }}">
+        </div>
+
+        <div class="form-group">
+          <label for="last_name">Prenume</label>
+          <input id="last_name" name="last_name" type="text" value="{{ user.last_name }}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Telefon</label>
+        <input id="phone" name="phone" type="text" value="{{ user.phone }}">
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit">Salvează</button>
+        <a class="btn btn-outline" href="{{ url_for('admin_users') }}">Înapoi</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

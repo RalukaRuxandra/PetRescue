@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Profil{% endblock %}
+{% block content %}
+<div class="container">
+  <h1 class="page-title">Profil</h1>
+  <div class="card card-pad" style="max-width:720px;margin:0 auto;">
+    <p><b>Nume:</b> {{ user.first_name }} {{ user.last_name }}</p>
+    <p><b>Email:</b> {{ user.email }}</p>
+    <p><b>Telefon:</b> {{ user.phone }}</p>
+
+    <div class="btn-row" style="margin-top:16px;">
+      <a class="btn" href="{{ url_for('logout') }}">Logout</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

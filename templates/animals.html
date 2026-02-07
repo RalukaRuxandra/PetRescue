@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Animale{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="page-actions">
+    <a class="btn btn-ghost" href="javascript:history.back()">← Înapoi</a>
+    <a class="btn btn-outline" href="{{ url_for('adaposturi') }}">Adăposturi</a>
+  </div>
+
+  <h1 class="page-title">Animale</h1>
+  <p class="page-subtitle">Lista animalelor încărcate de adăposturi (poză + poveste).</p>
+
+  {% if not animals %}
+    <div class="card card-pad">
+      <p class="muted">Momentan nu există animale încărcate.</p>
+    </div>
+  {% else %}
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px;">
+      {% for a in animals %}
+        <div class="card" style="overflow:hidden;">
+          {% if a.photo_filename %}
+            <div style="height:190px; background:#f2f4f7; overflow:hidden;">
+              <img src="{{ url_for('static', filename='uploads/' ~ a.photo_filename) }}"
+                   alt="{{ a.name }}"
+                   style="width:100%; height:100%; object-fit:cover; display:block;">
+            </div>
+          {% endif %}
+          <div style="padding:14px;">
+            <div style="font-weight:900; color:#243a8f; font-size:18px;">{{ a.name }}</div>
+            <div class="muted" style="margin-top:2px;">
+              {% if a.species %}{{ a.species }}{% endif %}
+              {% if a.species and a.age %} • {% endif %}
+              {% if a.age %}{{ a.age }}{% endif %}
+              {% if a.shelter_name %}<span> • {{ a.shelter_name }}</span>{% endif %}
+            </div>
+            <p style="margin-top:10px; white-space:pre-wrap;">{{ a.story }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

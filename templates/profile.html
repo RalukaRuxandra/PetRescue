@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Profil | PetRescue{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <div class="hero__card">
+      <div class="profile">
+        <div class="profile__left">
+          {% if user.avatar_url %}
+            <img class="avatar" src="{{ user.avatar_url }}" alt="Avatar" />
+          {% else %}
+            <div class="avatar avatar--placeholder" aria-label="Avatar placeholder">
+              {{ (user.first_name[:1] if user.first_name else 'P') | upper }}{{ (user.last_name[:1] if user.last_name else 'R') | upper }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="profile__right">
+          <h1 class="hero__title" style="font-size: 30px; margin-bottom: 6px;">
+            {{ user.first_name }} {{ user.last_name }}
+          </h1>
+
+          <div class="kv">
+            <div class="kv__row">
+              <div class="kv__key">Email</div>
+              <div class="kv__val">{{ user.email }}</div>
+            </div>
+            <div class="kv__row">
+              <div class="kv__key">Telefon</div>
+              <div class="kv__val">{{ user.phone }}</div>
+            </div>
+          </div>
+
+          <div class="hero__actions" style="margin-top: 14px;">
+            <a class="btn btn--primary" href="{{ url_for('profil_edit') }}">Editare profil</a>
+            <a class="btn btn--ghost" href="{{ url_for('logout') }}">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

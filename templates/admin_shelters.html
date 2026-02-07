@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Adăposturi aprobate</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="container" style="padding:40px 20px;">
+    <h1 class="page-title">Adăposturi aprobate</h1>
+    <p class="page-subtitle">Click pe un adăpost pentru editare / ștergere.</p>
+
+    <div class="btn-row" style="margin-bottom:18px;">
+      <a class="btn" href="{{ url_for('admin_dashboard') }}">Înapoi</a>
+    </div>
+
+    <div class="admin-grid">
+      {% for s in shelters %}
+        <a class="admin-item" href="{{ url_for('admin_shelter_detail', shelter_id=s.id) }}">
+          <div style="display:flex;gap:14px;align-items:center;">
+            {% if s.photo_filename %}
+              <img src="{{ url_for('static', filename='uploads/' ~ s.photo_filename) }}"
+                   style="width:90px;height:70px;object-fit:cover;border-radius:14px;border:1px solid var(--border);" alt="">
+            {% else %}
+              <div style="width:90px;height:70px;border-radius:14px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:900;">
+                Fără poză
+              </div>
+            {% endif %}
+            <div>
+              <div style="font-weight:900;color:var(--title);font-size:18px;">{{ s.name }}</div>
+              <div class="muted">{{ s.email }} · {{ s.phone }}</div>
+              <div class="muted">{{ s.address }}</div>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</body>
+</html>
